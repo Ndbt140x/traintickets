@@ -1,0 +1,54 @@
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+
+export default function BookingPage() {
+  const router = useRouter();
+  const { id } = router.query;
+  const [seats, setSeats] = useState(Array(20).fill(false));
+  const [selectedSeat, setSelectedSeat] = useState(null);
+
+  const handleSelectSeat = (index) => {
+    setSelectedSeat(index);
+  };
+
+  const handleBook = () => {
+    if (selectedSeat !== null) {
+      alert(`Место ${selectedSeat + 1} забронировано!`);
+      router.push("/orders");
+    }
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="min-h-screen p-6 bg-gray-100"
+    >
+      <h1 className="text-3xl font-bold text-center mb-6">Выбор места в поезде #{id}</h1>
+      <Card className="max-w-xl mx-auto">
+        <CardContent className="grid grid-cols-5 gap-4 p-6">
+          {seats.map((booked, index) => (
+            <Button
+              key={index}
+              disabled={booked}
+              variant={selectedSeat === index ? "default" : "outline"}
+              onClick={() => handleSelectSeat(index)}
+              className={booked ? "bg-gray-300 text-gray-500 cursor-not-allowed" : ""}
+            >
+              {index + 1}
+            </Button>
+          ))}
+        </CardContent>
+      </Card>
+      <div className="text-center mt-6">
+        <Button onClick={handleBook} disabled={selectedSeat === null} className="bg-blue-600 text-white">
+          Подтвердить бронь
+        </Button>
+      </div>
+    </motion.div>
+  );
+}
