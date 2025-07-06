@@ -1,0 +1,39 @@
+import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { motion } from "framer-motion";
+
+export default function SupportPage() {
+  const [message, setMessage] = useState("");
+
+  const handleSubmit = () => {
+    alert("Ваше сообщение отправлено. Мы свяжемся с вами.");
+    setMessage("");
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="min-h-screen p-6 bg-gray-100"
+    >
+      <h1 className="text-3xl font-bold text-center mb-6">Служба поддержки</h1>
+      <Card className="max-w-lg mx-auto">
+        <CardContent className="space-y-4 p-6">
+          <Textarea
+            placeholder="Опишите вашу проблему или вопрос..."
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            rows={6}
+          />
+          <Button onClick={handleSubmit} className="bg-blue-600 text-white">
+            Отправить
+          </Button>
+        </CardContent>
+      </Card>
+    </motion.div>
+  );
+}
