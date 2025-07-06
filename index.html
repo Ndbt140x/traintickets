@@ -1,0 +1,71 @@
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { motion } from "framer-motion";
+import Link from "next/link";
+import { useRouter } from "next/router";
+
+export default function HomePage() {
+  const [from, setFrom] = useState("");
+  const [to, setTo] = useState("");
+  const [date, setDate] = useState("");
+  const router = useRouter();
+
+  const handleSearch = () => {
+    router.push(`/routes?from=${from}&to=${to}&date=${date}`);
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.8 }}
+      className="min-h-screen bg-gradient-to-br from-blue-900 to-gray-900 text-white p-6"
+    >
+      <header className="flex justify-between items-center mb-10">
+        <h1 className="text-4xl font-bold">ЖД Билеты Онлайн</h1>
+        <nav className="space-x-4">
+          <Link href="/about" className="hover:underline">О нас</Link>
+          <Link href="/routes" className="hover:underline">Маршруты</Link>
+          <Link href="/orders" className="hover:underline">Мои заказы</Link>
+          <Link href="/profile" className="hover:underline">Кабинет</Link>
+          <Link href="/support" className="hover:underline">Поддержка</Link>
+        </nav>
+      </header>
+
+      <main className="max-w-xl mx-auto">
+        <Card className="bg-white text-black shadow-2xl p-6">
+          <CardContent className="space-y-4">
+            <h2 className="text-2xl font-semibold">Найти билеты</h2>
+            <Input
+              placeholder="Откуда"
+              value={from}
+              onChange={(e) => setFrom(e.target.value)}
+            />
+            <Input
+              placeholder="Куда"
+              value={to}
+              onChange={(e) => setTo(e.target.value)}
+            />
+            <Input
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+            />
+            <Button
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+              onClick={handleSearch}
+            >
+              Найти билеты
+            </Button>
+          </CardContent>
+        </Card>
+      </main>
+
+      <footer className="mt-20 text-center text-gray-400">
+        © 2025 ЖД Билеты Онлайн. Все права защищены.
+      </footer>
+    </motion.div>
+  );
+}
