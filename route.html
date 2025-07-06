@@ -1,0 +1,58 @@
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+
+const mockTrains = [
+  { id: 1, from: "Штутгарт", to: "Мюнхен", time: "08:00", duration: "4ч", price: 1500 },
+  { id: 2, from: "Штутгарт", to: "Нюрнберг", time: "12:30", duration: "4.5ч", price: 1700 },
+  { id: 3, from: "Штутгарт", to: "Кельн", time: "18:15", duration: "4ч 15м", price: 1800 },
+];
+
+export default function RoutesPage() {
+  const router = useRouter();
+  const { from, to, date } = router.query;
+  const [filteredTrains, setFilteredTrains] = useState([]);
+
+  useEffect(() => {
+    if (from && to) {
+      const results = mockTrains.filter(
+        (train) => train.from === from && train.to === to
+      );
+      setFilteredTrains(results);
+    }
+  }, [from, to]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="min-h-screen bg-gray-100 p-6"
+    >
+      <h1 className="text-3xl font-bold text-center mb-6">Доступные поезда на {date}</h1>
+      <div className="space-y-4 max-w-2xl mx-auto">
+        {filteredTrains.length > 0 ? (
+          filteredTrains.map((train) => (
+            <Card key={train.id} className="shadow-md">
+              <CardContent className="flex justify-between items-center p-4">
+                <div>
+                  <h2 className="text-xl font-semibold">{train.from} → {train.to}</h2>
+                  <p>Время отправления: {train.time}</p>
+                  <p>Длительность: {train.duration}</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-lg font-bold">{train.price}₽</p>
+                  <Button onClick={() => router.push(`/booking?id=${train.id}`)}>Забронировать</Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        ) : (
+          <p className="text-center text-gray-600">Нет поездов по выбранному маршруту.</p>
+        )}
+      </div>
+    </motion.div>
+  );
+}
